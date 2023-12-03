@@ -29,6 +29,8 @@ function App() {
   const [checkboxes, setCheckboxes] = useState({});
   const [selectedIds, setSelectedIds] = useState([]);
 
+  const port = process.env.PORT || 3000;
+  
   const handleCheckboxChange = (id) => {
     const updatedCheckboxes = {
       ...checkboxes,
@@ -67,7 +69,7 @@ function App() {
       await Promise.all(
         selectedIds.map(async (id) => {
           try {
-            await axios.delete(`http://localhost:3000/users/${id}`);
+            await axios.delete(`http://localhost:${port}/users/${id}`);
           } catch (error) {
             console.error(`Error deleting user with ID ${id}:`, error);
             // Handle error for a specific deletion if needed
@@ -78,7 +80,7 @@ function App() {
       // Clear checkboxes and selectedIds
       setCheckboxes({});
       setSelectedIds([]);
-      
+      // setSelectAll(false);
       // Reset pagination to the first page and load the updated data
       setCurrentPage(0);
       loadUserData(0, 10, 0);
@@ -110,14 +112,14 @@ function App() {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:3000/users/${id}`);
-      const upData = data.filter((x) => x.id != id);
+      const upData = data.filter((x) => x.id !== id);
       setData(upData);
     } catch (error) {
       console.error("Error deleting user:", error);
       // Handle error if the deletion request fails
     }
     // Implement delete functionality using the user ID (id)
-    // Perform deletion using axios or your preferred method
+    
   };
   // console.log(data);
   const sortOptions = ["name", "email", "role", "id"];
@@ -137,7 +139,7 @@ function App() {
         setSort("");
         return await axios
           .get(
-            `http://localhost:3000/users?q=${value}&_start=${start} &_end=${end}`
+            `http://localhost:${port}/users?q=${value}&_start=${start} &_end=${end}`
           )
           .then((response) => {
             setData(response.data);
@@ -151,7 +153,7 @@ function App() {
         setSort(sortValue);
         return await axios
           .get(
-            `http://localhost:3000/users?_sort=${sortValue}&_order=asc&_start=${start} &_end=${end}`
+            `http://localhost:${port}/users?_sort=${sortValue}&_order=asc&_start=${start} &_end=${end}`
           )
           .then((response) => {
             setData(response.data);
@@ -161,7 +163,7 @@ function App() {
           .catch((error) => console.log(error));
       default:
         return await axios
-          .get(`http://localhost:3000/users?_start=${start} &_end=${end}`)
+          .get(`http://localhost:${port}/users?_start=${start} &_end=${end}`)
           .then((response) => {
             setData(response.data);
             setCurrentPage(currentPage + increase);
