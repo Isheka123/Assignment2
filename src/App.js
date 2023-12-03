@@ -30,7 +30,7 @@ function App() {
   const [selectedIds, setSelectedIds] = useState([]);
 
   const port = process.env.PORT || 3000;
-  
+
   const handleCheckboxChange = (id) => {
     const updatedCheckboxes = {
       ...checkboxes,
@@ -76,7 +76,7 @@ function App() {
           }
         })
       );
-  
+
       // Clear checkboxes and selectedIds
       setCheckboxes({});
       setSelectedIds([]);
@@ -89,11 +89,10 @@ function App() {
       // Handle error if the deletion request fails
     }
   };
-  
- 
+
   const handleUpdate = async (id, updatedItem) => {
     try {
-      await axios.put(`http://localhost:3000/users/${id}`, updatedItem);
+      await axios.put(`http://localhost:${port}/users/${id}`, updatedItem);
       const updatedData = data.map((item) => {
         if (item.id === id) {
           return updatedItem;
@@ -108,10 +107,9 @@ function App() {
     }
   };
 
- 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/users/${id}`);
+      await axios.delete(`http://localhost:${port}/users/${id}`);
       const upData = data.filter((x) => x.id !== id);
       setData(upData);
     } catch (error) {
@@ -119,7 +117,6 @@ function App() {
       // Handle error if the deletion request fails
     }
     // Implement delete functionality using the user ID (id)
-    
   };
   // console.log(data);
   const sortOptions = ["name", "email", "role", "id"];
